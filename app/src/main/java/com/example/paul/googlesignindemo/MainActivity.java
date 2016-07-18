@@ -9,6 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,6 +27,10 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -125,12 +134,62 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
+            String idToken = acct.getIdToken();
+            Log.d("IdToken: ",idToken);
 //            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             // Views inside NavigationView's header
 //            mUserTextView.setText(acct.getDisplayName());
 //            mEmailTextView.setText(acct.getEmail());
             Uri uri = acct.getPhotoUrl();
             Log.d("login: ","successful");
+
+            String url = "http://httpbin.org/html";
+
+// Request a string response
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            // Result handling
+                            System.out.println(response.substring(0,100));
+                            Log.d("volley :",response.substring(0,100));
+                        }
+                    }, new Response.ErrorListener() {
+
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    // Error handling
+                    System.out.println("Something went wrong!");
+                    error.printStackTrace();
+
+                }
+            });
+
+// Add the request to the queue
+            Volley.newRequestQueue(this).add(stringRequest);
+
+
+//            HttpClient httpClient = new DefaultHttpClient();
+//            HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin");
+//
+//            try {
+//                List nameValuePairs = new ArrayList(1);
+//                nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
+//                httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//
+//                HttpResponse response = httpClient.execute(httpPost);
+//                int statusCode = response.getStatusLine().getStatusCode();
+//                final String responseBody = EntityUtils.toString(response.getEntity());
+//                Log.i(TAG, "Signed in as: " + responseBody);
+//            } catch (ClientProtocolException e) {
+//                Log.e(TAG, "Error sending ID token to backend.", e);
+//            } catch (IOException e) {
+//                Log.e(TAG, "Error sending ID token to backend.", e);
+//            }
+
 //            Picasso.with(mContext)
 //                    .load(uri)
 //                    .placeholder(android.R.drawable.sym_def_app_icon)
