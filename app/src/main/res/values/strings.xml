@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">googleSignInDemo</string>
+    <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="loading">loading..</string>
+    <string name="server_client_id">338084159981-pgumkm8nvod87nj9tt0ml4ooco8120d8.apps.googleusercontent.com</string>
+
+</resources>
